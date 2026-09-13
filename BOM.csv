@@ -1,12 +1,12 @@
-Item Name:,Price: (£GBP & $USD),Link:,Description:
-Raspberry Pi Zero 2WH,£17.30 / $23.41,https://thepihut.com/products/raspberry-pi-zero-2?variant=43855634497731,"The brains of the project, it will run the code and store all of the things needed to run the program on it."
-Li-Ion Battery HAT,£18.30 / $24.77,https://thepihut.com/products/li-ion-battery-hat-for-raspberry-pi,The housing for the battery. Is a case that holds the battery in and can provide power out of the battery.
-Batteries (14500),,,
-Micro-USB Cable,,,
-Display,,,
-Buttons (x3),,,
-Potentiometer / Rotary Encoder,,,
-Speakers,,,
-SD Card (32GB),,,
-Jumper Cables,,,
-Total,,,
+Item Name:,Price: (£GBP & $USD when converted from GBPT directly into USD),Link:,Description:
+Raspberry Pi Zero 2WH,£17.30 / $23.41,https://thepihut.com/products/raspberry-pi-zero-2?variant=43855634497731,"The brains of the project, it will run the code and store all of the things needed to run the program on it"
+Li-Ion Battery HAT,£18.30 / $24.77,https://thepihut.com/products/li-ion-battery-hat-for-raspberry-pi,The housing for the battery. Is a case that holds the battery in and can provide power out of the battery
+Batteries (14500),£3.75 / $5.08,https://www.batteriesplus.co.uk/acatalog/Lithium-Li-Ion-3.7V-14500-AA-800mAh-Rechargeable-Battery-2127.html,"The 14500 battery that will give all of the electronic components power. I couldn't find a 14500 battery on the 'The Pi Hut' page, so I got it on batteriesplus.co.uk"
+Display,£28.80 / $38.98,https://thepihut.com/products/3-2-ips-hdmi-lcd-display-for-raspberry-pi-480x800,"A 3.2"" HDMI display for the Raspberry Pi to show off the cool CLI style interface and the alarm clock settings etc."
+USB Type-A to USB Type-C & Micro-USB Cable,£4.09 /$5.54,https://www.amazon.co.uk/sourcing-map-Splitter-Charging-Tablet/dp/B0FZJ1S16W?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&th=1,A USB Type-C Cable that allows the Li-Ion HAT to power the Display
+"Buttons (x3 needed, but is 10x)",£1.90 / $2.57,https://thepihut.com/products/tactile-switch-buttons-12mm-square-6mm-tall-x-10-pack,Some buttons used for controlling the clock
+Rotary Encoder,£4.40 / $5.96,https://thepihut.com/products/rotary-encoder-extras,A rotary encoder that can be used for time control or menu switching
+Hi-FI Sound Card HAT & Speakers,£18.30 / $24.77,https://thepihut.com/products/hi-fi-sound-card-hat-for-raspberry-pi-with-speakers,A Raspberry Pi HAT with Speakers for the alarm clock to play a sound
+SD Card (32GB),£17 / $23.01,https://www.amazon.co.uk/Lexar-Micro-microSDHC-Memory-Adapter/dp/B0C1Y87VT3/ref=sr_1_15?crid=3DJV9GT7JGZ98&dib=eyJ2IjoiMSJ9.j8Js7NBJQrRKDPjqaAmvVBmfxK6SyCAIvXjSU1WORAx8JLUsa5NNg5doDR8quT9X5_Kho8QlEwYOMaNIldEqhkGgCkaI7EDmb6H2S1M38bH9Qc2hhvL4jqulLVIcezL44_x6KnTUdpcbpChGHWAsvaHLyeq5DIi3hQxzWxP7A0M5rW-dnMWxJKVJQrEZSG2sic6-7d7W7OF0eDey0Qjqhy1k2UNs5dWgMd1ntqzBFzI._aCVHlDzHFULMnTU9PEaitqXQa2MmxjwCv1OCUjoJDY&dib_tag=se&keywords=micro%2Bsd-cards%2B32gb&qid=1789308458&sprefix=micro%2Bsd-cards%2B32gb%2Caps%2C138&sr=8-15&th=1,A Micro-SD Card for the Raspberry Pi to have all of the data stored on
+Jumper Cables,£1.70 / $2.30,https://thepihut.com/products/premium-female-female-jumper-wires-20-x-6-150mm,Some Female to Female jumper cables that can be used to connect the Buttons and Rotary Encoder to the Raspberry Pi
+"Total: (minimum, as I am from the UK and the US prices are calculated off of converted UK prices, and shipping is not included from the different locations)",£115.54 / $156.39,N/A,"These are the names, prices, links and descriptions for all of the things that I need to complete this project. This will most likely be funded in S/X Tier. All of these prices are in UK £GBP and converted into $USD, but the total does not account for shipping/delivery expenses, customs expenses (to the US or UK)."
