@@ -130,34 +130,44 @@ enable_dpi_awareness()
 window = Tk()
 apply_theme(window)
 
-window.geometry("800x480")
+#Window Geometry easy changer
+windowheight = 480
+windowwidth = 800
+
+
+window.geometry(f"{windowwidth}x{windowheight}")
 window.configure(bg="#000000")
-center_window(window, 800, 480)
+center_window(window, windowwidth, windowheight)
 
 
+#Main canvas that is black in color and is the window (windowwidth x windowheight in px)
 canvas = Canvas(
     window,
     bg="#000000",
-    height=480,
-    width=800,
+    height=windowheight,
+    width=windowwidth,
     bd=0,
     highlightthickness=0,
     relief="ridge"
 )
 
+
+#Rectangle that is at the top of the window that is dark gray in color (is behind the 'Terminal Clock' text)
 canvas.place(x=0, y=0)
 canvas.create_rectangle(
     0.0,
     0.0,
-    800.0,
+    windowwidth,
     50.0,
-    fill="#FFFFFF",
+    fill="#171617",
     outline="")
 
+
+#'Terminal Clock' text in green shown at the top of the window (on top of the dark gray rectangle)
 canvas.create_text(
-    214.0,
+    windowwidth / 2,
     0.0,
-    anchor="nw",
+    anchor="n",
     text="Terminal Clock",
     fill="#00FF00",
     font=("IBM Plex Mono", 40 * -1, "bold", "roman")
