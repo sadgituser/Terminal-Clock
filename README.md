@@ -9,4 +9,6 @@ You can follow along with my project on Stardance [here](https://stardance.hackc
 
 I have also created a Lapse (Hackclub timelapse tool) recording an hour of me designing the clock shell [here](https://lapse.hackclub.com/timelapse/dwb5aaAge6s1)
 
+I have finished the BOM (Bill of Materials) and have started with the main program.
+
 Thanks for reading!
