@@ -9,12 +9,10 @@ from tkinter import (
     Button,
     Canvas,
     Checkbutton,
-    Entry,
     Frame,
     Label,
     Listbox,
     PhotoImage,
-    Radiobutton,
     StringVar,
     Text,
     Tk,
@@ -176,3 +174,20 @@ window.resizable(False, False)
 
 if __name__ == "__main__":
     window.mainloop()
+
+
+#Still to add:
+#Buttons for alarm setting, stopwatch, timer, and settings etc.
+#Functions to convert the physical button input to interact with the GUI (like pressing the button to set an alarm, or start the stopwatch etc.)
+#Functions to set the alarm, start the stopwatch, and start the timer etc.
+#Functions for the rotary encoder to scroll through the options in the GUI and select them.
+#Appearing and disappearing text on the CLI style 'terminal'
+#Fun messages on the terminal
+#Functionality to play sounds on the speaker when the alarm goes off, or when the timer goes off, or when the stopwatch is started/stopped etc.
+#Functionality for the stopwatch, timer, and alarm to work in the background while the GUI is running.
+#Functionality for menu switching between the main menu, alarm menu, stopwatch menu, timer menu, and settings menu etc.
+#Functionality to save the alarm, stopwatch, and timer settings to a file so that they can be loaded when the program is restarted.
+#Functionality to load the alarm, stopwatch, and timer settings from a file when the program is started.
+#Functionality to set the time and date on the clock (settings menu) and save it to a file so that it can be loaded when the program is restarted.
+#Functionality to ensure that the script restarts automatically when the Raspberry Pi is powered on (settings menu)
+#Other ideas...
