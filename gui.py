@@ -177,6 +177,7 @@ if __name__ == "__main__":
 
 
 #Still to add:
+#Convert difficult code to easier code without all of the canvas. stuff or learn canvas stuff and use it more efficiently.
 #Buttons for alarm setting, stopwatch, timer, and settings etc.
 #Functions to convert the physical button input to interact with the GUI (like pressing the button to set an alarm, or start the stopwatch etc.)
 #Functions to set the alarm, start the stopwatch, and start the timer etc.
@@ -191,3 +192,12 @@ if __name__ == "__main__":
 #Functionality to set the time and date on the clock (settings menu) and save it to a file so that it can be loaded when the program is restarted.
 #Functionality to ensure that the script restarts automatically when the Raspberry Pi is powered on (settings menu)
 #Other ideas...
+
+canvas.create_text(
+    windowwidth / 2,
+    0.0,
+    anchor="s",
+    text="Test text",
+    fill="#00FF00",
+    font=("IBM Plex Mono", 20 * -1, "bold", "roman")
+    )
