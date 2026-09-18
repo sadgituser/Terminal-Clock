@@ -1,6 +1,7 @@
 from pathlib import Path
 import ctypes
 import sys
+import time
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -128,10 +129,17 @@ enable_dpi_awareness()
 window = Tk()
 apply_theme(window)
 
+window.title("Terminal Clock")
+window.attributes("-topmost", True)  # Keep the window on top of other windows
+window.attributes("-alpha", 1.0)  # Set the window transparency (1.0 is fully opaque, 0.0 is fully transparent) 
+window.after(0, lambda: window.focus_force())  # Force focus on the window after it is created
+
 #Window Geometry easy changer
 windowheight = 480
 windowwidth = 800
 
+window.minsize(windowwidth, windowheight)
+window.maxsize(windowwidth, windowheight)
 
 window.geometry(f"{windowwidth}x{windowheight}")
 window.configure(bg="#000000")
@@ -192,12 +200,3 @@ if __name__ == "__main__":
 #Functionality to set the time and date on the clock (settings menu) and save it to a file so that it can be loaded when the program is restarted.
 #Functionality to ensure that the script restarts automatically when the Raspberry Pi is powered on (settings menu)
 #Other ideas...
-
-canvas.create_text(
-    windowwidth / 2,
-    0.0,
-    anchor="s",
-    text="Test text",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 20 * -1, "bold", "roman")
-    )
