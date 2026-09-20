@@ -1,33 +1,14 @@
-from pathlib import Path
 import ctypes
+import datetime
+from pathlib import Path
 import sys
-import time
-import random
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
-from tkinter import (
-    BooleanVar,
-    Button,
-    Canvas,
-    Checkbutton,
-    Entry,
-    Frame,
-    Label,
-    Listbox,
-    PhotoImage,
-    StringVar,
-    Text,
-    Tk,
-    ttk,
-)
+from tkinter import Canvas, Label, PhotoImage, Tk, ttk
 
 try:
     from PIL import Image, ImageTk
 except ImportError:
     Image = None
     ImageTk = None
-
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets\frame0")
@@ -39,18 +20,16 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def set_assets_path(path: str):
-    global ASSETS_PATH
-    ASSETS_PATH = OUTPUT_PATH / Path(path)
-
-
 def load_photo_image(path: str):
     try:
-        image = PhotoImage(file=path)
+        image = PhotoImage(file=str(path))
     except Exception:
         if Image is None or ImageTk is None:
-            raise
-        image = ImageTk.PhotoImage(Image.open(path))
+            return None
+        try:
+            image = ImageTk.PhotoImage(Image.open(path))
+        except Exception:
+            return None
     IMAGE_REFS.append(image)
     return image
 
@@ -74,27 +53,6 @@ def center_window(window, width, height):
     window.geometry(f"{width}x{height}+{x}+{y}")
 
 
-def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
-    radius = max(0, min(radius, abs(x2 - x1) / 2, abs(y2 - y1) / 2))
-    if radius == 0:
-        return canvas.create_rectangle(x1, y1, x2, y2, **kwargs)
-    points = [
-        x1 + radius, y1,
-        x2 - radius, y1,
-        x2, y1,
-        x2, y1 + radius,
-        x2, y2 - radius,
-        x2, y2,
-        x2 - radius, y2,
-        x1 + radius, y2,
-        x1, y2,
-        x1, y2 - radius,
-        x1, y1 + radius,
-        x1, y1,
-    ]
-    return canvas.create_polygon(points, smooth=True, **kwargs)
-
-
 class ImageButton(Label):
     def __init__(self, master=None, command=None, **kwargs):
         super().__init__(master, **kwargs)
@@ -106,269 +64,129 @@ class ImageButton(Label):
         if self._command is not None:
             self._command()
 
-    def configure(self, cnf=None, **kwargs):
-        if cnf and "command" in cnf:
-            cnf = dict(cnf)
-            self._command = cnf.pop("command")
-        if "command" in kwargs:
-            self._command = kwargs.pop("command")
-        return super().configure(cnf, **kwargs)
 
-    config = configure
+class TerminalClockApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Terminal Clock")
+        self.root.geometry("800x480")
+        self.root.configure(bg="#000000")
+        self.root.resizable(False, False)
+        center_window(self.root, 800, 480)
 
+        # Main Canvas Setup
+        self.canvas = Canvas(
+            self.root,
+            bg="#000000",
+            height=480,
+            width=800,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        self.canvas.place(x=0, y=0)
 
-def apply_theme(window):
-    if not THEME:
-        return
-    try:
-        ttk.Style(window).theme_use(THEME)
-    except Exception:
-        pass
+        # --- 1. Permanent UI (Header) ---
+        self.canvas.create_rectangle(0.0, 0.0, 800.0, 50.0, fill="#171617", outline="")
+        self.canvas.create_text(
+            214.0,
+            0.0,
+            anchor="nw",
+            text="Terminal Clock",
+            fill="#00FF00",
+            font=("IBM Plex Mono", -40, "bold")
+        )
 
+        header_img = load_photo_image(relative_to_assets("element_1.png"))
+        if header_img:
+            self.canvas.create_image(284.0, 73.0, image=header_img)
 
-enable_dpi_awareness()
+        # --- 2. Real-Time Persistent Clock Element ---
+        self.clock_id = self.canvas.create_text(
+            0.0,
+            65.0,
+            anchor="nw",
+            text="",
+            fill="#00FF00",
+            font=("IBM Plex Mono", -16, "bold")
+        )
 
-window = Tk()
-apply_theme(window)
+        # --- 3. Dynamic UI State ---
+        self.terminal_lines = [f"Terminal Line {i}" for i in range(1, 14)]
 
-window.geometry("800x480")
-window.configure(bg="#000000")
-center_window(window, 800, 480)
-window.resizable(False, False)
-window.minsize(750, 450)
-window.maxsize(850, 500)
-window.title("Terminal Clock")
+        # --- 4. Setup Controls & Start Loops ---
+        self._setup_buttons()
+        self.update_clock()
+        self.refresh_window()
 
-canvas = Canvas(
-    window,
-    bg="#000000",
-    height=480,
-    width=800,
-    bd=0,
-    highlightthickness=0,
-    relief="ridge"
-)
+    # --- Clock Update System ---
+    def update_clock(self):
+        """Updates the clock text string every second without redrawing the window."""
+        now_str = datetime.datetime.now().strftime("%H:%M:%S")
+        self.canvas.itemconfig(
+            self.clock_id,
+            text=f"   Terminal Clock OS: Time {now_str}"
+        )
+        self.root.after(1000, self.update_clock)
 
-canvas.place(x=0, y=0)
-canvas.create_rectangle(
-    0.0,
-    0.0,
-    800.0,
-    50.0,
-    fill="#171617",
-    outline="")
+    # --- Screen Refresh System ---
+    def refresh_window(self):
+        """Wipes only dynamic canvas items and redraws current terminal state."""
+        self.canvas.delete("dynamic_ui")
 
-canvas.create_text(
-    214.0,
-    0.0,
-    anchor="nw",
-    text="Terminal Clock",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 40 * -1, "bold", "roman")
-)
+        y_start = 99.0
+        line_spacing = 25.0
 
-image_image_1 = load_photo_image(
-    relative_to_assets("element_1.png"))
-image_1 = canvas.create_image(
-    284.0,
-    73.0,
-    image=image_image_1
-)
+        for i, line in enumerate(self.terminal_lines):
+            self.canvas.create_text(
+                0.0,
+                y_start + (i * line_spacing),
+                anchor="nw",
+                text=f"   > {line}",
+                fill="#00FF00",
+                font=("IBM Plex Mono", -16, "bold"),
+                tags="dynamic_ui"  # Tagged for selective clearing
+            )
 
-canvas.create_text(
-    0.0,
-    65.0,
-    anchor="nw",
-    text="  Terminal Clock OS: Time 08:55",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
+    def add_terminal_line(self, text):
+        """Appends a new line, keeps output capped to 13 lines, and triggers a window refresh."""
+        self.terminal_lines.append(text)
+        if len(self.terminal_lines) > 13:
+            self.terminal_lines.pop(0)
+        self.refresh_window()
 
-canvas.create_text(
-    0.0,
-    99.0,
-    anchor="nw",
-    text="   > Terminal Line 1",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
+    def _setup_buttons(self):
+        x_coords = [25.0, 225.0, 425.0, 625.0]
+        for idx, x_pos in enumerate(x_coords, start=1):
+            btn_img = load_photo_image(relative_to_assets(f"button_{idx}.png"))
 
-canvas.create_text(
-    0.0,
-    125.0,
-    anchor="nw",
-    text="   > Terminal Line 2",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
+            if btn_img:
+                btn = ImageButton(
+                    self.root,
+                    image=btn_img,
+                    borderwidth=0,
+                    highlightthickness=0,
+                    command=lambda b=idx: self.add_terminal_line(f"Button {b} clicked!"),
+                    relief="flat"
+                )
+            else:
+                # Fallback text buttons if image assets are missing
+                btn = Label(
+                    self.root,
+                    text=f"Button {idx}",
+                    bg="#171617",
+                    fg="#00FF00",
+                    font=("IBM Plex Mono", -12, "bold"),
+                    cursor="hand2"
+                )
+                btn.bind("<Button-1>", lambda e, b=idx: self.add_terminal_line(f"Button {b} clicked!"))
 
-canvas.create_text(
-    0.0,
-    150.0,
-    anchor="nw",
-    text="   > Terminal Line 3",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
+            btn.place(x=x_pos, y=435.0, width=150.0, height=30.0)
 
-canvas.create_text(
-    0.0,
-    175.0,
-    anchor="nw",
-    text="   > Terminal Line 4",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    200.0,
-    anchor="nw",
-    text="   > Terminal Line 5",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    225.0,
-    anchor="nw",
-    text="   > Terminal Line 6",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    250.0,
-    anchor="nw",
-    text="   > Terminal Line 7",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    275.0,
-    anchor="nw",
-    text="   > Terminal Line 8",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    300.0,
-    anchor="nw",
-    text="   > Terminal Line 9",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    325.0,
-    anchor="nw",
-    text="   > Terminal Line 10",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    350.0,
-    anchor="nw",
-    text="   > Terminal Line 11",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    375.0,
-    anchor="nw",
-    text="   > Terminal Line 12",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-canvas.create_text(
-    0.0,
-    400.0,
-    anchor="nw",
-    text="   > Terminal Line 13",
-    fill="#00FF00",
-    font=("IBM Plex Mono", 16 * -1, "bold", "roman")
-)
-
-button_image_1 = load_photo_image(
-    relative_to_assets("button_1.png"))
-button_1 = ImageButton(
-    window,
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
-    relief="flat"
-)
-button_1.place(
-    x=25.0,
-    y=435.0,
-    width=150.0,
-    height=30.0
-)
-
-button_image_2 = load_photo_image(
-    relative_to_assets("button_2.png"))
-button_2 = ImageButton(
-    window,
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
-    relief="flat"
-)
-button_2.place(
-    x=225.0,
-    y=435.0,
-    width=150.0,
-    height=30.0
-)
-
-button_image_3 = load_photo_image(
-    relative_to_assets("button_3.png"))
-button_3 = ImageButton(
-    window,
-    image=button_image_3,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
-    relief="flat"
-)
-button_3.place(
-    x=425.0,
-    y=435.0,
-    width=150.0,
-    height=30.0
-)
-
-button_image_4 = load_photo_image(
-    relative_to_assets("button_4.png"))
-button_4 = ImageButton(
-    window,
-    image=button_image_4,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_4 clicked"),
-    relief="flat"
-)
-button_4.place(
-    x=625.0,
-    y=435.0,
-    width=150.0,
-    height=30.0
-)
-window.resizable(False, False)
 
 if __name__ == "__main__":
-    window.mainloop()
+    enable_dpi_awareness()
+    root = Tk()
+    app = TerminalClockApp(root)
+    root.mainloop()
+
